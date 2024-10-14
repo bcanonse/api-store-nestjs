@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Query,
 } from '@nestjs/common';
@@ -13,6 +15,7 @@ export class ProductsController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.ACCEPTED)
   getProducts(
     @Query('limit') limit: number = 100,
     @Query('offset') offset: number = 0,
