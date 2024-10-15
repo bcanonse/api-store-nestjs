@@ -9,8 +9,7 @@ import { CustomersModule } from './customers/module/customers.module';
 import { BrandsModule } from './brands/module/brands.module';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-
-const API_KEY = 'KKS404K3Mjsd432';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -21,14 +20,11 @@ const API_KEY = 'KKS404K3Mjsd432';
     OrdersModule,
     CustomersModule,
     BrandsModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: 'API_KEY', // Nombre con el que se hara referencia
-      useValue: API_KEY, // El valor
-    },
     {
       provide: 'TASKS',
       useFactory: async (httpService: HttpService) => {
