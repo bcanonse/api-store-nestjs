@@ -6,11 +6,14 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { ProductsService } from '../service/products.service';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -32,10 +35,15 @@ export class ProductsController {
     return this.service.findAll();
   }
 
+  @Post()
+  create(@Body() product: CreateProductDto) {
+    return this.service.create(product);
+  }
+
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() payload: any,
+    @Body() payload: UpdateProductDto,
   ) {
     return this.service.update(id, payload);
   }
