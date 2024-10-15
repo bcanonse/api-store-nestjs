@@ -8,6 +8,8 @@ import { OrdersModule } from './orders/module/orders.module';
 import { CustomersModule } from './customers/module/customers.module';
 import { BrandsModule } from './brands/module/brands.module';
 
+const API_KEY = 'KKS404K3Mjsd432';
+
 @Module({
   imports: [
     CategoriesModule,
@@ -18,6 +20,12 @@ import { BrandsModule } from './brands/module/brands.module';
     BrandsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'API_KEY', // Nombre con el que se hara referencia
+      useValue: API_KEY, // El valor
+    },
+  ],
 })
 export class AppModule {}
