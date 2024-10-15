@@ -10,6 +10,7 @@ import {
 import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -30,6 +31,11 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
+  }
+
+  @Get(':id/orders')
+  findOrders(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOrdersByUser(id);
   }
 
   @Patch(':id')
