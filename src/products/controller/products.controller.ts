@@ -6,19 +6,19 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Put,
   Query,
 } from '@nestjs/common';
 import { ProductsService } from '../service/products.service';
+import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly service: ProductsService) {}
 
   @Get(':id')
-  getProduct(@Param('id') id: string) {
-    return this.service.findOne(+id);
+  getProduct(@Param('id', ParseIntPipe) id: number) {
+    return this.service.findOne(id);
   }
 
   @Get()
@@ -33,8 +33,11 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: any) {
-    return this.service.update(+id, payload);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: any,
+  ) {
+    return this.service.update(id, payload);
   }
 
   @Delete(':id')
