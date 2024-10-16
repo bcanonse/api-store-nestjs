@@ -10,11 +10,13 @@ import { BrandsModule } from './brands/module/brands.module';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { environments } from './environments';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath:
+        environments[process.env.NODE_ENV] || '.env',
       isGlobal: true,
     }),
     HttpModule,
