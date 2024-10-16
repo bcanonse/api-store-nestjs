@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import * as Joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoriesModule } from './categories/module/categories.module';
@@ -7,9 +11,7 @@ import { UsersModule } from './users/module/users.module';
 import { OrdersModule } from './orders/module/orders.module';
 import { CustomersModule } from './customers/module/customers.module';
 import { BrandsModule } from './brands/module/brands.module';
-import { HttpModule, HttpService } from '@nestjs/axios';
 import { DatabaseModule } from './database/database.module';
-import { ConfigModule } from '@nestjs/config';
 import { environments } from './environments';
 import config from './config';
 
@@ -20,6 +22,15 @@ import config from './config';
         environments[process.env.NODE_ENV] || '.env',
       load: [config],
       isGlobal: true,
+      //Usando joi para validar el esquema.
+      validationSchema: Joi.object({
+        API_KEY: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DB_PORT: Joi.number()
+          .port()
+          .required()
+          .default(5432),
+      }),
     }),
     HttpModule,
     CategoriesModule,
