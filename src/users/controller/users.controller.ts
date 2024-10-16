@@ -11,7 +11,9 @@ import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -33,6 +35,7 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Orders by user id' })
   @Get(':id/orders')
   findOrders(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOrdersByUser(id);
