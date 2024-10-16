@@ -40,6 +40,12 @@ export class EnvironmentVariables {
   @Min(0)
   @Max(65535)
   public readonly DB_PORT: number;
+
+  @IsNumber()
+  @IsPositive()
+  @Min(0)
+  @Max(65535)
+  public readonly PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
