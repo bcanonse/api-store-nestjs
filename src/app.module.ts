@@ -14,6 +14,7 @@ import { BrandsModule } from './brands/module/brands.module';
 import { DatabaseModule } from './database/database.module';
 import { environments } from './environments';
 import config from './config';
+import { validate } from './env.validation';
 
 @Module({
   imports: [
@@ -21,16 +22,17 @@ import config from './config';
       envFilePath:
         environments[process.env.NODE_ENV] || '.env',
       load: [config],
+      validate,
       isGlobal: true,
       //Usando joi para validar el esquema.
-      validationSchema: Joi.object({
-        API_KEY: Joi.string().required(),
-        DATABASE_NAME: Joi.string().required(),
-        DB_PORT: Joi.number()
-          .port()
-          .required()
-          .default(5432),
-      }),
+      // validationSchema: Joi.object({
+      //   API_KEY: Joi.string().required(),
+      //   DATABASE_NAME: Joi.string().required(),
+      //   DB_PORT: Joi.number()
+      //     .port()
+      //     .required()
+      //     .default(5432),
+      // }),
     }),
     HttpModule,
     CategoriesModule,
