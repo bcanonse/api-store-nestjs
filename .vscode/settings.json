@@ -2,5 +2,6 @@
   "editor.defaultFormatter": "EditorConfig.EditorConfig",
   "prettier.printWidth": 60,
   "editor.formatOnSave": true,
-  "prettier.requireConfig": true
+  "prettier.requireConfig": true,
+  "material-icon-theme.activeIconPack": "nest"
 }

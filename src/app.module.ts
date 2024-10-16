@@ -8,11 +8,15 @@ import { OrdersModule } from './orders/module/orders.module';
 import { CustomersModule } from './customers/module/customers.module';
 import { BrandsModule } from './brands/module/brands.module';
 import { HttpModule, HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     HttpModule,
     CategoriesModule,
     ProductsModule,

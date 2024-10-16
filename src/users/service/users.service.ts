@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
@@ -12,6 +14,7 @@ import { ProductsService } from 'src/products/service/products.service';
 export class UsersService {
   constructor(
     private readonly productsService: ProductsService,
+    private readonly config: ConfigService,
   ) {}
 
   private counterId = 1;
@@ -35,6 +38,7 @@ export class UsersService {
   }
 
   findAll() {
+    console.log(this.config.get('API_KEY'));
     return this.users;
   }
 
