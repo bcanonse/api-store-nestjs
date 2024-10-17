@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "start:offline": "npm run build && sls offline start --reloadHandler",
+    "deploy:dev": "npm run build && sls deploy --verbose",
+    "remove:deploy:dev": "sls remove --verbose"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.3",
@@ -25,8 +28,10 @@
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
-    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-express": "^10.4.5",
     "@nestjs/swagger": "^7.4.2",
+    "aws-lambda": "^1.0.7",
+    "aws-serverless-express": "^3.4.0",
     "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -49,6 +54,9 @@
     "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.5.0",
     "prettier": "^3.0.0",
+    "serverless-jetpack": "^0.11.2",
+    "serverless-offline": "^14.3.3",
+    "serverless-plugin-optimize": "^4.2.1-rc.1",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",

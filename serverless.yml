@@ -1,0 +1,40 @@
+service: api-store-nestjs
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  memorySize: 2048
+  timeout: 20
+
+
+plugins:
+  - serverless-plugin-optimize
+  - serverless-offline
+  - serverless-jetpack
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+
+# package:
+#   individually: true # an optimized package per function
+#   include:
+#     - .env
+#   exclude:
+#     - node_modules/**
+#     - .github/**
+
+functions:
+  main:
+    handler: dist/lambda.handler
+    description: NestJs backend
+    events:
+      - http:
+          cors: true
+          method: ANY
+          path: /
+      - http:
+          cors: true
+          method: ANY
+          path: '{proxy+}'
