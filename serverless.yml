@@ -7,7 +7,6 @@ provider:
   memorySize: 2048
   timeout: 20
 
-
 plugins:
   - serverless-plugin-optimize
   - serverless-offline
@@ -17,13 +16,13 @@ custom:
   serverless-offline:
     noPrependStageInUrl: true
 
-# package:
-#   individually: true # an optimized package per function
-#   include:
-#     - .env
-#   exclude:
-#     - node_modules/**
-#     - .github/**
+package:
+  include:
+    - .env
+  exclude:
+    - .vscode/**
+    - src/**
+    - .github/**
 
 functions:
   main:
