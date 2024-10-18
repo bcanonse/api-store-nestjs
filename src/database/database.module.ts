@@ -1,5 +1,7 @@
 import { Global, Module } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { Client } from 'pg';
+import config from 'src/config';
 
 const API_KEY = 'KKS404K3Mjsd432';
 
@@ -12,18 +14,24 @@ const API_KEY = 'KKS404K3Mjsd432';
     },
     {
       provide: 'PG',
-      useFactory: async () => {
+      useFactory: async (
+        configService: ConfigType<typeof config>,
+      ) => {
+        const { host, name, port, user, password } =
+          configService.dbPostgres;
+
         const client = new Client({
-          user: 'nestdb',
-          host: 'localhost',
-          port: 5432,
-          database: 'nestdb',
-          password: 'nestdb',
+          user,
+          host,
+          port,
+          database: name,
+          password,
         });
 
         await client.connect();
         return client;
       },
+      inject: [config.KEY],
     },
   ],
   exports: ['API_KEY', 'PG'],

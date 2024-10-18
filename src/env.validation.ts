@@ -1,6 +1,5 @@
 import { plainToInstance } from 'class-transformer';
 import {
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsPositive,
@@ -10,12 +9,12 @@ import {
   validateSync,
 } from 'class-validator';
 
-enum Environment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test',
-  Provision = 'provision',
-}
+// enum Environment {
+//   Development = 'development',
+//   Production = 'production',
+//   Test = 'test',
+//   Provision = 'provision',
+// }
 
 export class EnvironmentVariables {
   /* @IsEnum(Environment)
@@ -46,6 +45,28 @@ export class EnvironmentVariables {
   @Min(0)
   @Max(65535)
   public readonly PORT: number;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly POSTGRES_DB: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly POSTGRES_USER: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly POSTGRES_PASSWORD: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly POSTGRES_HOST: string;
+
+  @IsNumber()
+  @IsPositive()
+  @Min(5432)
+  @Max(5500)
+  public readonly POSTGRES_PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
