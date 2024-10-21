@@ -4,10 +4,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-enum UserRole {
-  Admin = 'A',
-  Supervissor = 'S',
-  Basic = 'B',
+export enum UserRole {
+  Admin = 'admin',
+  Supervissor = 'supervissor',
+  Basic = 'basic',
 }
 
 @Entity('users')
@@ -33,7 +33,9 @@ export class User {
   })
   public password: string;
 
-  @Column('enum', {
+  @Column({
+    type: 'enum',
+    enum: UserRole,
     comment: 'Role of user',
     default: UserRole.Basic,
   })

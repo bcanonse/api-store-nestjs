@@ -22,36 +22,36 @@ export class ProductsController {
   constructor(private readonly service: ProductsService) {}
 
   @Get(':id')
-  getProduct(@Param('id', ParseIntPipe) id: number) {
-    return this.service.findOne(id);
+  async getProduct(@Param('id', ParseIntPipe) id: number) {
+    return await this.service.findOne(id);
   }
 
   @Get()
-  @HttpCode(HttpStatus.ACCEPTED)
-  getProducts(
+  @HttpCode(HttpStatus.OK)
+  async getProducts(
     @Query('limit') limit: number = 100,
     @Query('offset') offset: number = 0,
-    @Query('brand') brand: string,
+    @Query('brand') brand?: string,
   ) {
     // return `products: limit => ${limit}, offset => ${offset}, brand => ${brand}`;
-    return this.service.findAll();
+    return await this.service.findAll();
   }
 
   @Post()
-  create(@Body() product: CreateProductDto) {
-    return this.service.create(product);
+  async create(@Body() product: CreateProductDto) {
+    return await this.service.create(product);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateProductDto,
   ) {
-    return this.service.update(id, payload);
+    return await this.service.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.service.delete(id);
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.service.delete(id);
   }
 }
