@@ -3,6 +3,9 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
   IsString,
   Length,
 } from 'class-validator';
@@ -22,4 +25,9 @@ export class CreateUserDto {
   @IsEnum(UserRoleDto)
   @IsNotEmpty()
   readonly role: UserRoleDto;
+
+  @IsPositive()
+  @IsNumber()
+  @IsOptional()
+  public readonly customerId: number;
 }

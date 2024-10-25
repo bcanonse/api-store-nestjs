@@ -11,6 +11,7 @@ import { ProductsService } from 'src/products/service/products.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserRoleDto } from '../dto/role-user.dto';
+import { CustomersService } from 'src/customers/service/customers.service';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +19,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     private readonly productsService: ProductsService,
+    private readonly customersService: CustomersService,
   ) {}
 
   mapToRole(role: UserRoleDto) {
@@ -39,16 +41,26 @@ export class UsersService {
       role: this.mapToRole(createUserDto.role),
     });
 
+    const { customerId } = createUserDto;
+    if (customerId) {
+      const customer =
+        await this.customersService.findOne(customerId);
+
+      newUser.customer = customer;
+    }
     return await this.usersRepository.save(newUser);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    return await this.usersRepository.find({
+      relations: ['customer'],
+    });
   }
 
   async findOne(id: number): Promise<User | null> {
     const user = await this.usersRepository.findOne({
       where: { id },
+      relations: ['customer'],
     });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
