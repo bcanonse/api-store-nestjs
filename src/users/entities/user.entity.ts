@@ -1,6 +1,10 @@
+import { DateAt } from '../../database/entities/date.entity';
+import { Customer } from '../../customers/entities/customer.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -40,4 +44,17 @@ export class User {
     default: UserRole.Basic,
   })
   public role: UserRole;
+
+  @Column(() => DateAt)
+  public register: DateAt;
+
+  @OneToOne(() => Customer, (customer) => customer.user, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_users_customer',
+  })
+  public customer: Customer;
 }
