@@ -1,3 +1,4 @@
+import { Category } from '../../categories/entities/category.entity';
 import { Brand } from '../../brands/entities/brand.entity';
 import {
   Column,
@@ -7,6 +8,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity({
@@ -72,4 +75,13 @@ export class Product {
     name: 'brand_id',
   })
   public brand: Brand;
+
+  @ManyToMany(
+    () => Category,
+    (category) => category.products,
+  )
+  @JoinTable({
+    name: 'products_categories',
+  })
+  public categories: Category[];
 }
