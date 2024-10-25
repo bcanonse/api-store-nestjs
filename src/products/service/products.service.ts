@@ -1,22 +1,28 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Product } from '../entities/product.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BrandsService } from 'src/brands/service/brands.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
+    private readonly brandsService: BrandsService,
   ) {}
 
   async findAll(): Promise<Product[]> {
-    return await this.productsRepository.find();
+    return await this.productsRepository.find({
+      relations: ['brand'],
+    });
   }
 
   async findOne(id: number): Promise<Product | null> {
@@ -26,6 +32,7 @@ export class ProductsService {
 
     const product = await this.productsRepository.findOne({
       where: { id },
+      relations: ['brand'],
     });
 
     if (!product)
@@ -39,16 +46,44 @@ export class ProductsService {
   async create(
     product: CreateProductDto,
   ): Promise<Product> {
-    const newProduct =
-      this.productsRepository.create(product);
+    try {
+      const newProduct =
+        this.productsRepository.create(product);
 
-    return await this.productsRepository.save(newProduct);
+      const { brandId } = product;
+      if (brandId) {
+        const brand =
+          await this.brandsService.findOne(brandId);
+
+        newProduct.brand = brand;
+      }
+
+      return await this.productsRepository.save(newProduct);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        console.error(error.driverError?.detail);
+        throw new HttpException(
+          error.driverError?.detail,
+          HttpStatus.CONFLICT,
+        );
+      }
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw error;
+    }
   }
 
   async update(id: number, payload: UpdateProductDto) {
     const product = await this.findOne(id);
 
-    if (!product) return null;
+    const { brandId } = payload;
+    if (brandId) {
+      const brand =
+        await this.brandsService.findOne(brandId);
+
+      product.brand = brand;
+    }
 
     this.productsRepository.merge(product, payload);
 

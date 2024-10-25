@@ -28,4 +28,9 @@ export class CreateProductDto {
 
   @IsUrl({}, { message: 'La URL no es valida' })
   public readonly image?: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive({ message: 'El numero debe ser positivo' })
+  public readonly brandId: number;
 }
