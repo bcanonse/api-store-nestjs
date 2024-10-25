@@ -32,7 +32,7 @@ const API_KEY = 'KKS404K3Mjsd432';
           entities: [
             __dirname + '/../**/*.entity{.ts,.js}',
           ],
-          synchronize: true,
+          synchronize: false,
         };
       },
     }),
