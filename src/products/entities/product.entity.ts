@@ -1,9 +1,12 @@
+import { Brand } from '../../brands/entities/brand.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity({
@@ -62,4 +65,11 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
   })
   public updatedAt: Date;
+
+  @ManyToOne(() => Brand, (brand) => brand.product)
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_products_brand',
+    name: 'brand_id',
+  })
+  public brand: Brand;
 }

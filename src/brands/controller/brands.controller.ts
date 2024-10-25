@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { BrandsService } from '../service/brands.service';
 import { CreateBrandDto } from '../dto/create-brand.dto';
@@ -20,30 +21,33 @@ export class BrandsController {
   ) {}
 
   @Post()
-  create(@Body() createBrandDto: CreateBrandDto) {
-    return this.brandsService.create(createBrandDto);
+  async create(@Body() createBrandDto: CreateBrandDto) {
+    return await this.brandsService.create(createBrandDto);
   }
 
   @Get()
-  findAll() {
-    return this.brandsService.findAll();
+  async findAll() {
+    return await this.brandsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.brandsService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.brandsService.findOne(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBrandDto: UpdateBrandDto,
   ) {
-    return this.brandsService.update(+id, updateBrandDto);
+    return await this.brandsService.update(
+      id,
+      updateBrandDto,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.brandsService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.brandsService.remove(id);
   }
 }
