@@ -15,6 +15,14 @@ export class BrandsService {
     private readonly brandsRepository: Repository<Brand>,
   ) {}
 
+  private getOptionsQuery(withRelations: boolean) {
+    return withRelations
+      ? {
+          relations: ['product'],
+        }
+      : undefined;
+  }
+
   async create(createBrandDto: CreateBrandDto) {
     const newBrand =
       this.brandsRepository.create(createBrandDto);
@@ -26,10 +34,11 @@ export class BrandsService {
     return await this.brandsRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, withRelations = true) {
+    const options = this.getOptionsQuery(withRelations);
     const brand = await this.brandsRepository.findOne({
       where: { id },
-      relations: ['product'],
+      ...options,
     });
 
     if (!brand)

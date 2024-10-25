@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import {
   Injectable,
@@ -17,6 +17,14 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<Category>,
   ) {}
 
+  private getOptionsQuery(withRelations: boolean) {
+    return withRelations
+      ? {
+          relations: ['products'],
+        }
+      : undefined;
+  }
+
   async create(createCategoryDto: CreateCategoryDto) {
     const newBrand = this.categoriesRepository.create(
       createCategoryDto,
@@ -29,16 +37,14 @@ export class CategoriesService {
     return await this.categoriesRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, withRelations = true) {
+    const options = this.getOptionsQuery(withRelations);
     const brand = await this.categoriesRepository.findOne({
       where: { id },
-      relations: ['product'],
+      ...options,
     });
 
-    if (!brand)
-      throw new NotFoundException(
-        `The category ${id} not found`,
-      );
+    if (!brand) this.throwNotFoundCategoryExcepcetion(id);
 
     return brand;
   }
@@ -58,5 +64,40 @@ export class CategoriesService {
     await this.findOne(id);
 
     return await this.categoriesRepository.delete(id);
+  }
+
+  async findByIds(categoriesId: number[]) {
+    const categories =
+      await this.categoriesRepository.findBy({
+        id: In(categoriesId),
+      });
+
+    if (!categories && categories?.length === 0) {
+      this.throwNotFoundCategoryExcepcetion(
+        categoriesId,
+        false,
+      );
+    }
+
+    if (categories.length === 0) {
+      this.throwNotFoundCategoryExcepcetion(
+        categoriesId,
+        false,
+      );
+    }
+
+    return categories;
+  }
+
+  private throwNotFoundCategoryExcepcetion(
+    data: any,
+    isSingular = true,
+  ) {
+    const singularMessage = isSingular
+      ? 'category'
+      : 'categories';
+    throw new NotFoundException(
+      `The ${singularMessage} ${data} not found`,
+    );
   }
 }

@@ -4,12 +4,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Product } from '../entities/product.entity';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { UpdateProductDto } from '../dto/update-product.dto';
 import { QueryFailedError, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { BrandsService } from 'src/brands/service/brands.service';
+import { CategoriesService } from 'src/categories/service/categories.service';
+
+import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
+
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -17,6 +21,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
     private readonly brandsService: BrandsService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   async findAll(): Promise<Product[]> {
@@ -32,7 +37,7 @@ export class ProductsService {
 
     const product = await this.productsRepository.findOne({
       where: { id },
-      relations: ['brand'],
+      relations: ['brand', 'categories'],
     });
 
     if (!product)
@@ -50,12 +55,22 @@ export class ProductsService {
       const newProduct =
         this.productsRepository.create(product);
 
-      const { brandId } = product;
+      const { brandId, categoriesId } = product;
       if (brandId) {
-        const brand =
-          await this.brandsService.findOne(brandId);
+        const brand = await this.brandsService.findOne(
+          brandId,
+          false,
+        );
 
         newProduct.brand = brand;
+      }
+
+      if (categoriesId) {
+        const categories =
+          await this.categoriesService.findByIds(
+            categoriesId,
+          );
+        newProduct.categories = categories;
       }
 
       return await this.productsRepository.save(newProduct);

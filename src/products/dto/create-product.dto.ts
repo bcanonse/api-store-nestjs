@@ -5,6 +5,7 @@ import {
   IsUrl,
   MaxLength,
   IsPositive,
+  IsArray,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -33,4 +34,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsPositive({ message: 'El numero debe ser positivo' })
   public readonly brandId: number;
+
+  @IsArray({
+    message: 'Es necesario los ids',
+  })
+  public readonly categoriesId: number[];
 }
