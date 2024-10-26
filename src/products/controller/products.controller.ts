@@ -54,4 +54,26 @@ export class ProductsController {
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.service.delete(id);
   }
+
+  @Delete(':id/category/:categoryId')
+  async deleteByCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return await this.service.removeCategoryByProduct(
+      id,
+      categoryId,
+    );
+  }
+
+  @Put(':id/category/:categoryId')
+  async addCategoryToProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return await this.service.addCategoryToProduct(
+      id,
+      categoryId,
+    );
+  }
 }

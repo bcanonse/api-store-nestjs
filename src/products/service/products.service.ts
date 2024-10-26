@@ -24,6 +24,57 @@ export class ProductsService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
+  private throwNotFoundProduct(
+    data: any,
+    isSingular = true,
+  ) {
+    const singularMessage = isSingular
+      ? 'product'
+      : 'products';
+    throw new NotFoundException(
+      `The ${singularMessage} ${data} not found`,
+    );
+  }
+
+  async removeCategoryByProduct(
+    productId: number,
+    categoryId: number,
+  ) {
+    const product = await this.productsRepository.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    if (!product) this.throwNotFoundProduct(productId);
+
+    product.categories = product.categories?.filter(
+      (category) => category.id !== categoryId,
+    );
+
+    return await this.productsRepository.save(product);
+  }
+
+  async addCategoryToProduct(
+    productId: number,
+    categoryId: number,
+  ) {
+    const product = await this.productsRepository.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    if (!product) this.throwNotFoundProduct(productId);
+
+    const category = await this.categoriesService.findOne(
+      categoryId,
+      false,
+    );
+
+    product.categories.push(category);
+
+    return await this.productsRepository.save(product);
+  }
+
   async findAll(): Promise<Product[]> {
     return await this.productsRepository.find({
       relations: ['brand'],
@@ -92,12 +143,20 @@ export class ProductsService {
   async update(id: number, payload: UpdateProductDto) {
     const product = await this.findOne(id);
 
-    const { brandId } = payload;
+    const { brandId, categoriesId } = payload;
     if (brandId) {
       const brand =
         await this.brandsService.findOne(brandId);
 
       product.brand = brand;
+    }
+
+    if (categoriesId) {
+      const categories =
+        await this.categoriesService.findByIds(
+          categoriesId,
+        );
+      product.categories = categories;
     }
 
     this.productsRepository.merge(product, payload);
