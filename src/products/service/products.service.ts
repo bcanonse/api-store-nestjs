@@ -4,7 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { QueryFailedError, Repository } from 'typeorm';
+import {
+  QueryFailedError,
+  Repository,
+  Between,
+  FindOptionsWhere,
+} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { BrandsService } from 'src/brands/service/brands.service';
@@ -87,10 +92,14 @@ export class ProductsService {
   async findAll(
     params?: FilterProductsDto,
   ): Promise<Product[]> {
-    const { limit, offset } = params;
-    console.log(limit, offset);
+    const where: FindOptionsWhere<Product> = {};
+    const { limit, offset, minPrice, maxPrice } = params;
+    if (minPrice && maxPrice) {
+      where.price = Between(minPrice, maxPrice);
+    }
     return await this.productsRepository.find({
       relations: ['brand'],
+      where,
       // para enviar el limit, lo hacemos en la propiedad "take"
       take: limit,
       // para enviar el offset, lo hacemos en la propiedad "skip"
