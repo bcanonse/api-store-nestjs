@@ -9,7 +9,7 @@ import {
 
 import { Customer } from '../../customers/entities/customer.entity';
 import { DateAt } from '../../database/entities/date.entity';
-import { OrderProducts } from './order-product.entity';
+import { OrderProduct } from '../../order-products/entities/order-product.entity';
 
 @Entity('orders')
 export class Order {
@@ -28,6 +28,6 @@ export class Order {
   })
   public customer: Customer;
 
-  @OneToMany(() => OrderProducts, (item) => item.order)
-  public items: OrderProducts[];
+  @OneToMany(() => OrderProduct, (item) => item.order)
+  public items: OrderProduct[];
 }

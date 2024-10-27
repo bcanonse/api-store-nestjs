@@ -6,7 +6,6 @@ import {
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User, UserRole } from '../entities/user.entity';
-import { Order } from 'src/orders/entities/order.entity';
 import { ProductsService } from 'src/products/service/products.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -68,17 +67,17 @@ export class UsersService {
     return user;
   }
 
-  async findOrdersByUser(
-    id: number,
-  ): Promise<Order | null> {
-    const user = await this.findOne(id);
+  // async findOrdersByUser(
+  //   id: number,
+  // ): Promise<Order | null> {
+  //   const user = await this.findOne(id);
 
-    return {
-      date: new Date(),
-      user: user,
-      products: await this.productsService.findAll(),
-    };
-  }
+  //   return {
+  //     // date: new Date(),
+  //     // user: user,
+  //     // products: await this.productsService.findAll(),
+  //   };
+  // }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);

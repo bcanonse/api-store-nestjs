@@ -7,11 +7,11 @@ import {
 } from 'typeorm';
 
 import { DateAt } from '../../database/entities/date.entity';
+import { Order } from '../../orders/entities/order.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Order } from './order.entity';
 
 @Entity('order_products')
-export class OrderProducts {
+export class OrderProduct {
   @PrimaryGeneratedColumn({
     primaryKeyConstraintName: 'pk_order_products_id',
     comment: 'Id of order_products table',

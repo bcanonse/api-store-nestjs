@@ -36,6 +36,14 @@ export class ProductsService {
     );
   }
 
+  private getOptionsQuery(withRelations: boolean) {
+    return withRelations
+      ? {
+          relations: ['brand', 'categories'],
+        }
+      : undefined;
+  }
+
   async removeCategoryByProduct(
     productId: number,
     categoryId: number,
@@ -81,14 +89,19 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: number): Promise<Product | null> {
+  async findOne(
+    id: number,
+    withRelations = true,
+  ): Promise<Product | null> {
     // const product = await this.productsRepository.findOneBy(
     //   { id: id },
     // );
 
+    const options = this.getOptionsQuery(withRelations);
+
     const product = await this.productsRepository.findOne({
       where: { id },
-      relations: ['brand', 'categories'],
+      ...options,
     });
 
     if (!product)
