@@ -1,8 +1,10 @@
+import { Order } from '../../orders/entities/order.entity';
 import { DateAt } from '../../database/entities/date.entity';
 import { User } from '../../users/entities/user.entity';
 import {
   Column,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -43,4 +45,7 @@ export class Customer {
 
   @Column(() => DateAt)
   public register: DateAt;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  public orders: Order[];
 }
