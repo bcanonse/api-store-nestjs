@@ -14,6 +14,7 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 
 import { Product } from '../entities/product.entity';
+import { FilterProductsDto } from '../dto/filter-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -83,9 +84,17 @@ export class ProductsService {
     return await this.productsRepository.save(product);
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAll(
+    params?: FilterProductsDto,
+  ): Promise<Product[]> {
+    const { limit, offset } = params;
+    console.log(limit, offset);
     return await this.productsRepository.find({
       relations: ['brand'],
+      // para enviar el limit, lo hacemos en la propiedad "take"
+      take: limit,
+      // para enviar el offset, lo hacemos en la propiedad "skip"
+      skip: offset,
     });
   }
 

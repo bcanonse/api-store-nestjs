@@ -15,6 +15,7 @@ import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FilterProductsDto } from '../dto/filter-product.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -28,13 +29,9 @@ export class ProductsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getProducts(
-    @Query('limit') limit: number = 100,
-    @Query('offset') offset: number = 0,
-    @Query('brand') brand?: string,
-  ) {
+  async getProducts(@Query() params: FilterProductsDto) {
     // return `products: limit => ${limit}, offset => ${offset}, brand => ${brand}`;
-    return await this.service.findAll();
+    return await this.service.findAll(params);
   }
 
   @Post()

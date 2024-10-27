@@ -29,6 +29,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // Lanzar error si existen datos prohibidos
       disableErrorMessages:
         process.env.ENVIRONMENT === 'production',
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
