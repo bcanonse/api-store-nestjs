@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
   BadRequestException,
+  ClassSerializerInterceptor,
   ValidationPipe,
 } from '@nestjs/common';
 import {
@@ -33,6 +34,13 @@ async function bootstrap() {
         enableImplicitConversion: true,
       },
     }),
+  );
+
+  // usamos el interceptor en la configuración global
+  // añadimos una nueva instancia de la clase "ClassSerializerInterceptor" a la configuración global
+  // al crear la clase, le debemos mandar el reflector, para esto lo obtenemos y lo enviamos
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
   );
 
   const config = new DocumentBuilder()

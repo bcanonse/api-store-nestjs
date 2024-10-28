@@ -86,6 +86,14 @@ export class Product {
   )
   @JoinTable({
     name: 'products_categories',
+    // joinColumn: {
+    //   name: 'product_id',
+    //   referencedColumnName: 'id',
+    // },
+    // inverseJoinColumn: {
+    //   name: 'category_id',
+    //   referencedColumnName: 'id',
+    // },
   })
   public categories: Category[];
 }
