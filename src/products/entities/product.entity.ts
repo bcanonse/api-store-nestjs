@@ -10,12 +10,15 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  Index,
 } from 'typeorm';
 
 @Entity({
   name: 'products',
   comment: 'Table to store products',
 })
+// en un array enviamo los atributos que esten indexados de forma conjunta
+// @Index(['price', 'stock'])
 export class Product {
   // ID autoincremental generado automáticamente
   @PrimaryGeneratedColumn({
@@ -43,6 +46,7 @@ export class Product {
     nullable: false,
     default: 0,
   })
+  @Index('idx_products_price')
   price: number;
 
   @Column({
