@@ -17,7 +17,7 @@ export class Brand {
   })
   public id: number;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 230 })
   public name: string;
 
   @Column('varchar', { length: 255 })
