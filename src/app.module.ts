@@ -15,6 +15,7 @@ import { DatabaseModule } from './database/database.module';
 import { environments } from './environments';
 import config from './config';
 import { validate } from './env.validation';
+import { AuthModule } from './auth/module/auth.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { validate } from './env.validation';
     BrandsModule,
     DatabaseModule,
     OrderProductsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
