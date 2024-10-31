@@ -2,15 +2,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
-import { User, UserRole } from '../entities/user.entity';
-import { ProductsService } from 'src/products/service/products.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRoleDto } from '../dto/role-user.dto';
+import * as bcrypt from 'bcrypt';
+
+import { ProductsService } from 'src/products/service/products.service';
 import { CustomersService } from 'src/customers/service/customers.service';
+import { User, UserRole } from '../entities/user.entity';
+
+import { UserRoleDto } from '../dto/role-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +42,13 @@ export class UsersService {
       role: this.mapToRole(createUserDto.role),
     });
 
+    const hashPassword = await bcrypt.hash(
+      createUserDto.password,
+      10,
+    );
+
+    newUser.password = hashPassword;
+
     const { customerId } = createUserDto;
     if (customerId) {
       const customer =
@@ -65,6 +74,12 @@ export class UsersService {
       throw new NotFoundException(`User #${id} not found`);
     }
     return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return await this.usersRepository.findOneBy({
+      email,
+    });
   }
 
   // async findOrdersByUser(

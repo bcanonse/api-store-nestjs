@@ -7,6 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 export enum UserRole {
   Admin = 'admin',
@@ -35,6 +36,7 @@ export class User {
     length: 255,
     comment: 'Password of user',
   })
+  @Exclude()
   public password: string;
 
   @Column({
