@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigType } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 
 import { UsersModule } from 'src/users/module/users.module';
 
@@ -13,6 +14,7 @@ import config from 'src/config';
 
 import { AuthController } from '../controllers/auth.controller';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { JwtAuthGuard } from '../guards/jwt-auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -35,7 +37,15 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
       },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })
