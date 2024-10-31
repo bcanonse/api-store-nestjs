@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from '../service/products.service';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
@@ -17,7 +18,11 @@ import { UpdateProductDto } from '../dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FilterProductsDto } from '../dto/filter-product.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 
+@UseGuards(RolesGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
@@ -36,6 +41,7 @@ export class ProductsController {
     return await this.service.findAll(params);
   }
 
+  @Roles(UserRole.Admin)
   @Post()
   async create(@Body() product: CreateProductDto) {
     return await this.service.create(product);
