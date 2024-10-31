@@ -16,7 +16,6 @@ import { environments } from './environments';
 import config from './config';
 import { validate } from './env.validation';
 import { AuthModule } from './auth/module/auth.module';
-import { AuthService } from './auth/services/auth.service';
 import { AuthController } from './auth/controllers/auth.controller';
 
 @Module({
@@ -68,7 +67,6 @@ import { AuthController } from './auth/controllers/auth.controller';
       },
       inject: [HttpService],
     },
-    AuthService,
   ],
 })
 export class AppModule {}

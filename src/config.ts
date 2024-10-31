@@ -7,6 +7,10 @@ export default registerAs('config', () => {
       port: process.env.DB_PORT,
     },
     apiKey: process.env.API_KEY,
+    jwt: {
+      secret: process.env.JWT_SECRET,
+      expires: process.env.JWT_EXPIRE_IN,
+    },
     dbPostgres: {
       name: process.env.POSTGRES_DB,
       host: process.env.POSTGRES_HOST,

@@ -34,6 +34,14 @@ export class EnvironmentVariables {
   @IsNotEmpty()
   public readonly API_KEY: string;
 
+  @IsString()
+  @IsNotEmpty()
+  public readonly JWT_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly JWT_EXPIRE_IN: string;
+
   @IsNumber()
   @IsPositive()
   @Min(0)
