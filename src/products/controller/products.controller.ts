@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from '../service/products.service';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
@@ -16,7 +17,9 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FilterProductsDto } from '../dto/filter-product.dto';
+import { JwtAuthGuard } from 'src/auth/decorators/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
