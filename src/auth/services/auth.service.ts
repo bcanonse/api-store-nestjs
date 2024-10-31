@@ -16,7 +16,7 @@ export class AuthService {
       user.password,
     );
 
-    if (!user && !isMatch) return null;
+    if (!user || !isMatch) return null;
 
     return user;
   }

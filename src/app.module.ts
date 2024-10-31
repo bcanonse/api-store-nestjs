@@ -17,6 +17,7 @@ import config from './config';
 import { validate } from './env.validation';
 import { AuthModule } from './auth/module/auth.module';
 import { AuthService } from './auth/services/auth.service';
+import { AuthController } from './auth/controllers/auth.controller';
 
 @Module({
   imports: [
@@ -47,7 +48,7 @@ import { AuthService } from './auth/services/auth.service';
     OrderProductsModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     AppService,
     {
