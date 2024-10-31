@@ -10,6 +10,7 @@ import { UpdateOrderDto } from '../dto/update-order.dto';
 
 import { Order } from '../entities/order.entity';
 import { CustomersService } from 'src/customers/service/customers.service';
+import { UsersService } from 'src/users/service/users.service';
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +18,7 @@ export class OrdersService {
     @InjectRepository(Order)
     private readonly ordersRepository: Repository<Order>,
     private readonly customersService: CustomersService,
+    private readonly usersService: UsersService,
   ) {}
 
   private throwNotFoundProduct(
@@ -86,5 +88,20 @@ export class OrdersService {
     await this.findOne(id);
 
     return this.ordersRepository.delete(id);
+  }
+
+  async getOrdersByCustomer(userId: number) {
+    const user = await this.usersService.findOne(userId);
+
+    const { id: customerId } = user.customer;
+
+    if (!customerId) return [];
+
+    const options = this.getOptionsQuery(true);
+
+    return await this.ordersRepository.findOne({
+      where: { customer: { id: customerId } },
+      ...options,
+    });
   }
 }
