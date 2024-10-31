@@ -17,7 +17,8 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FilterProductsDto } from '../dto/filter-product.dto';
-import { JwtAuthGuard } from 'src/auth/decorators/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('products')
@@ -30,6 +31,7 @@ export class ProductsController {
     return await this.service.findOne(id);
   }
 
+  @Public()
   @Get()
   @HttpCode(HttpStatus.OK)
   async getProducts(@Query() params: FilterProductsDto) {
