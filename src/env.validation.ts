@@ -75,6 +75,10 @@ export class EnvironmentVariables {
   @Min(5432)
   @Max(5500)
   public readonly POSTGRES_PORT: number;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly DATABASE_URL: string;
 }
 
 export function validate(config: Record<string, unknown>) {

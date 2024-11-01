@@ -3,6 +3,7 @@ import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Client } from 'pg';
 import config from 'src/config';
+import { getSsl } from './get-ssl';
 
 const API_KEY = 'KKS404K3Mjsd432';
 
@@ -14,25 +15,16 @@ const API_KEY = 'KKS404K3Mjsd432';
       useFactory: async (
         configService: ConfigType<typeof config>,
       ) => {
-        const {
-          host,
-          name,
-          port,
-          user: username,
-          password,
-        } = configService.dbPostgres;
-
+        const ssl = getSsl();
         return {
           type: 'postgres',
-          host,
-          port,
-          username,
-          password,
-          database: name,
+          url: configService.postgresUrl,
           entities: [
             __dirname + '/../**/*.entity{.ts,.js}',
           ],
           synchronize: false,
+          // Conexion ssl para production
+          ssl,
         };
       },
     }),

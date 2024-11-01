@@ -11,6 +11,7 @@ export default registerAs('config', () => {
       secret: process.env.JWT_SECRET,
       expires: process.env.JWT_EXPIRE_IN,
     },
+    postgresUrl: process.env.DATABASE_URL,
     dbPostgres: {
       name: process.env.POSTGRES_DB,
       host: process.env.POSTGRES_HOST,
