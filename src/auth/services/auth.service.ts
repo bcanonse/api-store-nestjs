@@ -28,7 +28,7 @@ export class AuthService {
   async login(user: User) {
     const payload: PayloadToken = {
       role: user.role,
-      sub: user.id.toString(),
+      sub: user.id,
     };
 
     return {

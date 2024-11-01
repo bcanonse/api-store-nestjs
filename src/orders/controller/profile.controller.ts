@@ -26,7 +26,7 @@ export class ProfileController {
     const user = req.user as PayloadToken;
 
     return await this.ordersService.getOrdersByCustomer(
-      +user.sub,
+      user.sub,
     );
   }
 }
