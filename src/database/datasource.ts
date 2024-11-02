@@ -1,17 +1,17 @@
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
+import { getSsl } from './get-ssl';
 
 config();
 const configService = new ConfigService();
 
+const ssl = getSsl();
+
 export default new DataSource({
   type: 'postgres',
-  username: configService.get('POSTGRES_USER'),
-  password: configService.get('POSTGRES_PASSWORD'),
-  database: configService.get('POSTGRES_DB'),
-  host: configService.get('POSTGRES_HOST'),
-  port: configService.get('POSTGRES_PORT'),
+  url: configService.get('DATABASE_URL'),
+  ssl,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: false,
   logging: true,

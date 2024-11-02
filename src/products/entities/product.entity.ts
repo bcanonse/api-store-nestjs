@@ -73,6 +73,11 @@ export class Product {
   })
   public updatedAt: Date;
 
+  @Column('boolean', {
+    default: true,
+  })
+  public active: boolean;
+
   @ManyToOne(() => Brand, (brand) => brand.product)
   @JoinColumn({
     foreignKeyConstraintName: 'fk_products_brand',
