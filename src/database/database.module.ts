@@ -39,15 +39,10 @@ const API_KEY = 'KKS404K3Mjsd432';
       useFactory: async (
         configService: ConfigType<typeof config>,
       ) => {
-        const { host, name, port, user, password } =
-          configService.dbPostgres;
-
+        const ssl = getSsl();
         const client = new Client({
-          user,
-          host,
-          port,
-          database: name,
-          password,
+          connectionString: configService.postgresUrl,
+          ssl,
         });
 
         await client.connect();
