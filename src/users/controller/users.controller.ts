@@ -12,6 +12,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -20,6 +21,7 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
