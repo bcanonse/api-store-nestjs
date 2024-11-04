@@ -1,7 +1,15 @@
-import { ConfigService } from '@nestjs/config';
+import {
+  ConfigModule,
+  ConfigService,
+} from '@nestjs/config';
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 import { getSsl } from './get-ssl';
+import { environments } from '../environments';
+
+ConfigModule.forRoot({
+  envFilePath: environments[process.env.NODE_ENV] || '.env',
+});
 
 config();
 const configService = new ConfigService();
